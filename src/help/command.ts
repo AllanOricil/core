@@ -145,7 +145,16 @@ export class CommandHelp extends HelpFormatter {
       label = labels.join(', ')
     }
 
-    if (flag.type === 'option') {
+    if (this.config.showFlagTypeLabel) {
+      label += ` ${colorize(
+        this.config?.theme?.flagType,
+        flag.typeLabel && flag.type === 'option'
+          ? flag.multiple
+            ? chalk.underline(flag.typeLabel)
+            : flag.typeLabel
+          : 'boolean',
+      )}`
+    } else if (flag.type === 'option') {
       let value = flag.helpValue || (this.opts.showFlagNameInTitle ? flag.name : '<value>')
       if (!flag.helpValue && flag.options) {
         value = showOptions || this.opts.showFlagOptionsInTitle ? `${flag.options.join('|')}` : '<option>'
